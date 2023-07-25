@@ -27,6 +27,21 @@ def pull_card_text(text_interaction):
     return card_name.text.strip(), card_text.text.strip(), card_image
 
 
+def get_random_team(name_list):
+    new_list = name_list.split(",")
+    new_team = {}
+    count = 0
+    random.shuffle(new_list)
+    for i in new_list:
+        i.strip()
+        if count % 2:
+            new_team[i] = 1
+        else:
+            new_team[i] = 2
+        count += 1
+    return new_team
+
+
 @bot.event
 async def on_ready():
     print("Bot is up and ready!")
@@ -59,6 +74,12 @@ async def coin_flip(interaction: discord.Interaction):
 @app_commands.describe(looking_up="What am I looking up?")
 async def yugioh_card(interaction: discord.Interaction, looking_up: str):
     await interaction.response.send_message(f"```{pull_card_text(looking_up)}```")
+
+
+@bot.tree.command(name="random_team")
+@app_commands.describe(team_input="give me a list seperated by comma's")
+async def random_team(interaction: discord.Interaction, team_input: str):
+    await interaction.response.send_message(f"```{get_random_team(team_input)}```")
 
 
 bot.run(token)
